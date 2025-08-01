@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSV 路径链接展示</title>
+</head>
+<body>
+
+<div id="links-container"></div>
+
+<script>
+  fetch('pdf.csv')  // 这里替换成你的 CSV 文件名
+    .then(res => res.text())
+    .then(text => {
+      // 拆行，过滤空行
+      const paths = text.trim().split('\n').filter(line => line.length > 0);
+      const container = document.getElementById('links-container');
+
+      // 生成链接元素，插入页面
+      paths.forEach(path => {
+        const a = document.createElement('a');
+        a.href = path;
+        a.textContent = path;
+        a.target = '_blank';       // 新标签打开
+        a.style.display = 'block'; // 每个链接换行显示
+        container.appendChild(a);
+      });
+    })
+    .catch(err => console.error('读取 CSV 失败:', err));
+</script>
+
+</body>
+</html>

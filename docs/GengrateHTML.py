@@ -1,8 +1,8 @@
 import os
 import csv
 
-dirs=["./images","./av"]
-targetfiles=['image.csv','av.csv']
+dirs=["./images","./av","./pdfs"]
+targetfiles=['image.csv','av.csv','pdf.csv']
 n=len(dirs)
 files=list()
 

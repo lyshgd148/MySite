@@ -31,56 +31,56 @@
 
   <script>
     let images = [];   // 定义在外部，方便全局使用
-let index = 0;
-const viewer = document.getElementById("viewer");
+    let index = 0;
+    const viewer = document.getElementById("viewer");
 
-function showImage() {
-  if (images.length === 0) return; // 数据还没准备好，不做任何事
-  viewer.style.opacity = 0;
-  setTimeout(() => {
-    viewer.src = images[index];
-    viewer.style.opacity = 1;
-  }, 150);
-}
-
-fetch('image.csv')
-  .then(res => res.text())
-  .then(text => {
-    images = text.trim().split('\n').filter(line => line.length > 0);
-    // 数据准备好后，调用显示第一张
-    showImage();
-  })
-  .catch(err => console.error(err));
-
-// 事件监听不变，前提是 images 加载完才能有效
-window.addEventListener("wheel", (e) => {
-  if (images.length === 0) return; // 确保有数据
-  if (e.deltaY > 0) {
-    index = (index + 1) % images.length;
-  } else {
-    index = (index - 1 + images.length) % images.length;
-  }
-  showImage();
-});
-
-let touchStartY = 0;
-
-window.addEventListener("touchstart", (e) => {
-  touchStartY = e.touches[0].clientY;
-});
-
-window.addEventListener("touchend", (e) => {
-  if (images.length === 0) return;
-  const deltaY = e.changedTouches[0].clientY - touchStartY;
-  if (Math.abs(deltaY) > 30) {
-    if (deltaY < 0) {
-      index = (index + 1) % images.length;
-    } else {
-      index = (index - 1 + images.length) % images.length;
+    function showImage() {
+      if (images.length === 0) return; // 数据还没准备好，不做任何事
+      viewer.style.opacity = 0;
+      setTimeout(() => {
+        viewer.src = images[index];
+        viewer.style.opacity = 1;
+      }, 150);
     }
-    showImage();
-  }
-});
+
+    fetch('image.csv')
+      .then(res => res.text())
+      .then(text => {
+        images = text.trim().split('\n').filter(line => line.length > 0);
+        // 数据准备好后，调用显示第一张
+        showImage();
+      })
+      .catch(err => console.error(err));
+
+    // 事件监听不变，前提是 images 加载完才能有效
+    window.addEventListener("wheel", (e) => {
+      if (images.length === 0) return; // 确保有数据
+      if (e.deltaY > 0) {
+        index = (index + 1) % images.length;
+      } else {
+        index = (index - 1 + images.length) % images.length;
+      }
+      showImage();
+    });
+
+    let touchStartY = 0;
+
+    window.addEventListener("touchstart", (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener("touchend", (e) => {
+      if (images.length === 0) return;
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(deltaY) > 30) {
+        if (deltaY < 0) {
+          index = (index + 1) % images.length;
+        } else {
+          index = (index - 1 + images.length) % images.length;
+        }
+        showImage();
+      }
+    });
   </script>
 </body>
 
