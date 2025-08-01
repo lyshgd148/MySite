@@ -31,24 +31,12 @@
   <video id="player" controls playsinline></video>
 
   <script>
-     fetch('av.csv')
-      .then(res => res.text())
-      .then(text => {
-        const videos = text.trim().split('\n').filter(line => line.length > 0);
-
-      })
-      .catch(err => console.error(err));
-
-    // const videos = [
-    //   "./av/pl.mp4",
-    //   "./av/A_young_Japanese_gir.mp4"
-    //   // 按需添加更多视频路径
-    // ];
-
+     let videos = [];
     let index = 0;
     const player = document.getElementById("player");
 
     function loadVideo() {
+      if (videos.length === 0) return;
       player.pause();
       player.src = videos[index];
       player.load();
@@ -57,10 +45,17 @@
       });
     }
 
-    loadVideo();
+    fetch('av.csv')
+      .then(res => res.text())
+      .then(text => {
+        videos = text.trim().split('\n').filter(line => line.length > 0);
+        loadVideo();  // 数据加载完成后播放第一视频
+      })
+      .catch(err => console.error(err));
 
     // PC端滚轮切换视频
     window.addEventListener("wheel", (e) => {
+      if (videos.length === 0) return;
       if (e.deltaY > 0) {
         index = (index + 1) % videos.length;
       } else {
@@ -77,6 +72,7 @@
     });
 
     window.addEventListener("touchend", (e) => {
+      if (videos.length === 0) return;
       const deltaY = e.changedTouches[0].clientY - touchStartY;
       if (Math.abs(deltaY) > 30) {
         if (deltaY < 0) {
