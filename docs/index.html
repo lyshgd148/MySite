@@ -1,6 +1,7 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +17,14 @@
       margin: 0;
       font-family: sans-serif;
     }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
     a {
       color: #00ff00;
       font-size: 2em;
@@ -25,13 +34,26 @@
       border-radius: 10px;
       transition: background-color 0.3s, color 0.3s;
     }
+
     a:hover {
       background-color: #00ff00;
       color: black;
     }
+
+    .company-name {
+      text-align: center;
+      color: #00ff00;
+      font-size: 20px;
+    }
   </style>
 </head>
+
 <body>
-  <a href="snake.html">贪吃蛇</a>
+  <div>
+    <p class="company-name">江苏云图机器人有限公司</p>
+    <a href="snake.html">贪吃蛇</a>
+  </div>
+
 </body>
+
 </html>
