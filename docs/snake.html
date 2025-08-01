@@ -1,0 +1,140 @@
+<!-- snake.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>贪吃蛇</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      background: #111;
+      border: 2px solid #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    
+    let tileCount = 20;
+    let tileSize;
+
+    function resizeCanvas() {
+      const minSize = Math.min(window.innerWidth, window.innerHeight);
+      canvas.width = canvas.height = minSize * 0.9;
+      tileSize = canvas.width / tileCount;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let snake = [{x: 10, y: 10}];
+    let food = {x: 5, y: 5};
+    let dx = 0;
+    let dy = 0;
+    let speed = 150;
+
+    function draw() {
+      ctx.fillStyle = "#111";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // food
+      ctx.fillStyle = "red";
+      ctx.fillRect(food.x * tileSize, food.y * tileSize, tileSize, tileSize);
+
+      // snake
+      ctx.fillStyle = "#0f0";
+      for (let s of snake) {
+        ctx.fillRect(s.x * tileSize, s.y * tileSize, tileSize, tileSize);
+      }
+    }
+
+    function update() {
+      const head = {...snake[0]};
+      head.x += dx;
+      head.y += dy;
+
+      if (head.x === food.x && head.y === food.y) {
+        snake.unshift(head);
+        food = {
+          x: Math.floor(Math.random() * tileCount),
+          y: Math.floor(Math.random() * tileCount)
+        };
+      } else {
+        snake.pop();
+        snake.unshift(head);
+      }
+
+      if (
+        head.x < 0 || head.x >= tileCount ||
+        head.y < 0 || head.y >= tileCount ||
+        snake.slice(1).some(s => s.x === head.x && s.y === head.y)
+      ) {
+        alert("游戏结束！");
+        snake = [{x: 10, y: 10}];
+        dx = dy = 0;
+      }
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      setTimeout(gameLoop, speed);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      switch(e.key) {
+        case "ArrowUp": if (dy === 0) {dx = 0; dy = -1;} break;
+        case "ArrowDown": if (dy === 0) {dx = 0; dy = 1;} break;
+        case "ArrowLeft": if (dx === 0) {dx = -1; dy = 0;} break;
+        case "ArrowRight": if (dx === 0) {dx = 1; dy = 0;} break;
+      }
+    });
+
+    document.addEventListener("touchstart", handleTouchStart, false);
+    document.addEventListener("touchmove", handleTouchMove, false);
+    let xDown = null;
+    let yDown = null;
+
+    function handleTouchStart(evt) {
+      const firstTouch = evt.touches[0];
+      xDown = firstTouch.clientX;
+      yDown = firstTouch.clientY;
+    }
+
+    function handleTouchMove(evt) {
+      if (!xDown || !yDown) return;
+
+      let xUp = evt.touches[0].clientX;
+      let yUp = evt.touches[0].clientY;
+
+      let xDiff = xDown - xUp;
+      let yDiff = yDown - yUp;
+
+      if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff > 0 && dx === 0) { dx = -1; dy = 0; }
+        else if (xDiff < 0 && dx === 0) { dx = 1; dy = 0; }
+      } else {
+        if (yDiff > 0 && dy === 0) { dx = 0; dy = -1; }
+        else if (yDiff < 0 && dy === 0) { dx = 0; dy = 1; }
+      }
+
+      xDown = yDown = null;
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
