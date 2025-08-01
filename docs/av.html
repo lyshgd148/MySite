@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>视频轮播</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    video {
+      max-width: 90vw;
+      max-height: 90vh;
+      background: black;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <video id="player" controls playsinline></video>
+
+  <script>
+    const videos = [
+      "./av/pl.mp4",
+
+      // 按需添加更多视频路径
+    ];
+
+    let index = 0;
+    const player = document.getElementById("player");
+
+    function loadVideo() {
+      player.pause();
+      player.src = videos[index];
+      player.load();
+      player.play().catch(() => {
+        // 自动播放可能被阻止，用户需手动点击播放
+      });
+    }
+
+    loadVideo();
+
+    // PC端滚轮切换视频
+    window.addEventListener("wheel", (e) => {
+      if (e.deltaY > 0) {
+        index = (index + 1) % videos.length;
+      } else {
+        index = (index - 1 + videos.length) % videos.length;
+      }
+      loadVideo();
+    });
+
+    // 移动端手指滑动切换视频
+    let touchStartY = 0;
+
+    window.addEventListener("touchstart", (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener("touchend", (e) => {
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(deltaY) > 30) {
+        if (deltaY < 0) {
+          index = (index + 1) % videos.length;
+        } else {
+          index = (index - 1 + videos.length) % videos.length;
+        }
+        loadVideo();
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图片轮播</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <img id="viewer" src="" alt="图片">
+
+  <script>
+    const images = [
+      "./images/屏幕截图 2024-03-17 162307.png",
+      "./images/屏幕截图 2024-04-16 192455.png",
+      "./images/屏幕截图 2024-04-16 192811.png",
+      "./images/屏幕截图 2024-04-16 194723.png",
+      "./images/屏幕截图 2024-04-16 194742.png",
+      "./images/屏幕截图 2024-07-21 044244.png",
+      "./images/屏幕截图 2024-08-03 001601.png",
+      "./images/pl1.png",
+      "./images/pl2.png",
+      "./images/pl3.png",
+      "./images/download.jpg",
+      "./images/download.png",
+      "./images/线性方程组的解判定.jpg"
+    ];
+
+    let index = 0;
+    const viewer = document.getElementById("viewer");
+
+    function showImage() {
+      viewer.style.opacity = 0;
+      setTimeout(() => {
+        viewer.src = images[index];
+        viewer.style.opacity = 1;
+      }, 150);
+    }
+
+    // 初始加载第一张
+    showImage();
+
+    // PC端滚轮
+    window.addEventListener("wheel", (e) => {
+      if (e.deltaY > 0) {
+        index = (index + 1) % images.length;
+      } else {
+        index = (index - 1 + images.length) % images.length;
+      }
+      showImage();
+    });
+
+    // 移动端手指滑动
+    let touchStartY = 0;
+
+    window.addEventListener("touchstart", (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener("touchend", (e) => {
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(deltaY) > 30) {
+        if (deltaY < 0) {
+          index = (index + 1) % images.length;
+        } else {
+          index = (index - 1 + images.length) % images.length;
+        }
+        showImage();
+      }
+    });
+  </script>
+</body>
+
+</html>
