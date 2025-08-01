@@ -31,11 +31,19 @@
   <video id="player" controls playsinline></video>
 
   <script>
-    const videos = [
-      "./av/pl.mp4",
-      "./av/A_young_Japanese_gir.mp4"
-      // 按需添加更多视频路径
-    ];
+     fetch('av.csv')
+      .then(res => res.text())
+      .then(text => {
+        const videos = text.trim().split('\n').filter(line => line.length > 0);
+
+      })
+      .catch(err => console.error(err));
+
+    // const videos = [
+    //   "./av/pl.mp4",
+    //   "./av/A_young_Japanese_gir.mp4"
+    //   // 按需添加更多视频路径
+    // ];
 
     let index = 0;
     const player = document.getElementById("player");

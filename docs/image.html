@@ -30,21 +30,31 @@
   <img id="viewer" src="" alt="图片">
 
   <script>
-    const images = [
-      "./images/屏幕截图 2024-03-17 162307.png",
-      "./images/屏幕截图 2024-04-16 192455.png",
-      "./images/屏幕截图 2024-04-16 192811.png",
-      "./images/屏幕截图 2024-04-16 194723.png",
-      "./images/屏幕截图 2024-04-16 194742.png",
-      "./images/屏幕截图 2024-07-21 044244.png",
-      "./images/屏幕截图 2024-08-03 001601.png",
-      "./images/pl1.png",
-      "./images/pl2.png",
-      "./images/pl3.png",
-      "./images/download.jpg",
-      "./images/download.png",
-      "./images/线性方程组的解判定.jpg"
-    ];
+    fetch('images.csv')
+      .then(res => res.text())
+      .then(text => {
+        const images = text.trim().split('\n').filter(line => line.length > 0);
+
+      })
+      .catch(err => console.error(err));
+
+
+
+    // const images = [
+    //   "./images/屏幕截图 2024-03-17 162307.png",
+    //   "./images/屏幕截图 2024-04-16 192455.png",
+    //   "./images/屏幕截图 2024-04-16 192811.png",
+    //   "./images/屏幕截图 2024-04-16 194723.png",
+    //   "./images/屏幕截图 2024-04-16 194742.png",
+    //   "./images/屏幕截图 2024-07-21 044244.png",
+    //   "./images/屏幕截图 2024-08-03 001601.png",
+    //   "./images/pl1.png",
+    //   "./images/pl2.png",
+    //   "./images/pl3.png",
+    //   "./images/download.jpg",
+    //   "./images/download.png",
+    //   "./images/线性方程组的解判定.jpg"
+    // ];
 
     let index = 0;
     const viewer = document.getElementById("viewer");
